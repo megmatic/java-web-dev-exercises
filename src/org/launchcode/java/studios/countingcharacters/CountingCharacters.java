@@ -1,25 +1,48 @@
 package org.launchcode.java.studios.countingcharacters;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.io.File;
 import java.util.Scanner;
+import java.io.FileNotFoundException;
 
 public class CountingCharacters {
 
     public static void main(String[] args) {
 
-//        Scanner input = new Scanner(System.in);
-        String sentence = "If the product of two terms is zero then common sense says at least one of the two terms has to be zero to start with. So if you move all the terms over to one side, you can put the quadratics into a form that can be factored allowing that side of the equation to equal zero. Once you’ve done that, it’s pretty straightforward from there.";
+        String sentence = "";
+
+        try {
+            File myObj = new File("src/org/launchcode/java/studios/countingcharacters/text.txt");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                sentence += data;
+            }
+            myReader.close();
+        }catch(FileNotFoundException ex) {
+            System.out.println(ex);
+            System.out.println("OH NO!!");
+        }
+
+        System.out.println(sentence);
+
+        sentence = sentence.toLowerCase();
 
         char[] charactersInString = sentence.toCharArray();
         HashMap<Character, Integer> charactersCounted = new HashMap<>();
 
         for (Character characterInString : charactersInString) {
+            if (!Character.isLetter(characterInString)) {
+                continue;
+            }
             if (charactersCounted.containsKey(characterInString)) {
                 charactersCounted.merge(characterInString, 1, Integer::sum);
             } else {
                 charactersCounted.put(characterInString, 1);
             }
+
         }
 
         for (Map.Entry<Character, Integer> characterCounted : charactersCounted.entrySet()) {
